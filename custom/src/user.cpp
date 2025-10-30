@@ -3,10 +3,11 @@
 #include "../custom/include/autonomous.h"
 #include "../custom/include/intake.h"
 // Modify autonomous, driver, or pre-auton code below
-int auton_selected = 0;
+int auton_selected = 3;
 bool auto_started = false;
 
 void runAutonomous() {
+  
   auto_started = true;
   switch(auton_selected) {
     case 0:
@@ -37,6 +38,7 @@ void runAutonomous() {
     case 9:
       right9LongDisrupt();
   }
+  
 }
 
 int ch1, ch2, ch3, ch4;
@@ -136,7 +138,7 @@ void runPreAutonomous() {
   } else {
     thread odom = thread(trackNoOdomWheel);
   }
-
+  
   while(!auto_started){
     Brain.Screen.clearScreen();
     Brain.Screen.printAt(5, 20, "Selected Auton:");
@@ -172,5 +174,6 @@ void runPreAutonomous() {
         Brain.Screen.printAt(5, 40, "Right 9 & Disrupt");
         break;
     }
+    
   }
 }

@@ -541,6 +541,42 @@ void awp(){
 
 //todo
 void left7LongandWing(){
+  heading_correction_kp = 0.8;
+  vex::task antiJamF([]{
+    while(1){
+      antiJamTask();
+      vex::wait(20, msec);
+    }
+    return 0;
+  });
+  // Use this for tuning linear and turn pid
+  storeIntake();
+  correct_angle = -45;
+  vex::task matchloadDeploy([]{
+    vex::wait(850, msec);
+    matchloader.set(true);
+    return 0;
+  });
+  moveToPoint(-8.2, 24, 1, 2000, false, 6);
+  turnToAngle(-130, 300, false, 7);
+  moveToPoint(-22, -3, 1, 2000, false, 12);
+  turnToAngle(180, 800, true, 7);
+  driveChassis(6,6);
+  vex::wait(1.1, sec);
+  moveToPoint(-23, 5, -1, 2000, false, 8);
+  turnToAngle(180, 800, true, 7);
+  driveChassis(-7,-7);
+  vex::wait(0.4, sec);
+  scoreLongGoal();
+  driveChassis(0,0);
+  vex::wait(1.4, sec);
+  driveChassis(8,8);
+  vex::wait(0.1, sec);
+  moveToPoint(-13, 4, 1, 2000, false, 8);
+  turnToAngle(-177, 800, true, 7);
+  driveToHeading(-25, 180, 3000, 5);
+  stopChassis(brakeType::hold);
+  //
 
 }
 

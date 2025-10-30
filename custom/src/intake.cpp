@@ -52,22 +52,12 @@ void storeIntake(){
     intake.spin(forward, 12, voltageUnits::volt);
     hood.spin(forward, -3, voltageUnits::volt);
 }
-
 void antiJamTask(){
-        if((intakeSpeed != 0 && fabs(intake.velocity(vex::velocityUnits::rpm)) < 5 && intake.torque(vex::torqueUnits::Nm) > 0.2) && rejectBall == false){
+        if((intakeSpeed != 0 && fabs(intake.velocity(vex::velocityUnits::rpm)) < 5 && intake.torque(vex::torqueUnits::Nm) > 0.2)){
             intake.spin(forward, -intakeSpeed, voltageUnits::volt);
             vex::wait(100, msec);
             intake.spin(forward, intakeSpeed, voltageUnits::volt);
-        } else{
-          if(ballSensTop.hue() <= 10 && !isRed){
-            hood.spin(forward, -12, voltageUnits::volt);
-            intake.spin(forward, -12, voltageUnits::volt);
-          }
-          if(ballSensTop.hue() >= 130 && isRed){
-            hood.spin(forward, -12, voltageUnits::volt);
-            intake.spin(forward, -12, voltageUnits::volt);
-          }
-        }
+        } 
         
 
        

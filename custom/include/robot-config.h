@@ -15,7 +15,8 @@ extern motor right_chassis2;
 extern motor right_chassis3;
 extern motor_group right_chassis;
 extern inertial inertial_sensor;
-
+extern rotation vertical_tracker;
+extern rotation horizontal_tracker;
 extern motor intake;
 extern motor hood;
 extern digital_out leftWing;

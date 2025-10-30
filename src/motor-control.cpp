@@ -1429,9 +1429,7 @@ void moveToPointChain(double x, double y, int dir, double exit_dist, double time
     right_output = left_output;
     left_output = left_output + correction_output;
     right_output = right_output - correction_output;
-    if(fabs(hypot(x - x_pos, y - y_pos)) <= exit_dist){
-      break;
-    }
+    
     // Max Output Check
     scaleToMax(left_output, right_output, max_output);
 
