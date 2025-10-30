@@ -30,5 +30,6 @@ void trackXOdomWheel();
 void trackYOdomWheel();
 void turnToPoint(double x, double y, int dir, double time_limit_msec);
 void moveToPoint(double x, double y, int dir, double time_limit_msec, bool exit = true, double max_output = 12, bool overturn = false);
-void moveToPointChain(double x, double y, int dir, double time_limit_msec, double max_output = 12, bool overturn = false);
+void moveToPointChain(double x, double y, int dir, double exit_dist, double time_limit_msec, double max_output = 12, bool overturn = false);
 void boomerang(double x, double y, int dir, double a, double dlead, double time_limit_msec, bool exit = true, double max_output = 12, bool overturn = false);
+void driveToDist(double distance_mm, int dir, double time_limit_msec, bool exit = true, double max_output = 12);
