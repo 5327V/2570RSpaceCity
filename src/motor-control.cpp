@@ -242,6 +242,115 @@ void turnToAngle(double turn_angle, double time_limit_msec, bool exit, double ma
   is_turning = false;
 }
 
+void driveToDist(double distance_mm, int dir, double time_limit_msec, bool exit, double max_output){
+    // Store initial distance sensor value
+    double start_distance = frontDistanceSensor.value();
+    stopChassis(vex::brakeType::coast);
+    is_turning = true;
+    double threshold = 0.5;
+    int drive_direction = dir;
+
+    double max_slew_fwd = drive_direction > 0 ? max_slew_accel_fwd : max_slew_decel_rev;
+    double max_slew_rev = drive_direction > 0 ? max_slew_decel_fwd : max_slew_accel_rev;
+    bool min_speed = false;
+
+    if(!exit) {
+        // Adjust slew rates and min speed for chaining
+        if(!dir_change_start && dir_change_end) {
+            max_slew_fwd = drive_direction > 0 ? 24 : max_slew_decel_rev;
+            max_slew_rev = drive_direction > 0 ? max_slew_decel_fwd : 24;
+        }
+        if(dir_change_start && !dir_change_end) {
+            max_slew_fwd = drive_direction > 0 ? max_slew_accel_fwd : 24;
+            max_slew_rev = drive_direction > 0 ? 24 : max_slew_accel_rev;
+            min_speed = true;
+        }
+        if(!dir_change_start && !dir_change_end) {
+            max_slew_fwd = 24;
+            max_slew_rev = 24;
+            min_speed = true;
+        }
+    }
+
+    distance_mm = fabs(distance_mm); // Ensure distance is positive for PID
+    PID pid_distance = PID(distance_kp, distance_ki, distance_kd);
+    PID pid_heading = PID(heading_correction_kp, heading_correction_ki, heading_correction_kd);
+
+    // Configure PID controllers
+    pid_distance.setTarget(distance_mm);
+    pid_distance.setIntegralMax(3);  
+    pid_distance.setSmallBigErrorTolerance(threshold, threshold * 3);
+    pid_distance.setSmallBigErrorDuration(50, 250);
+    pid_distance.setDerivativeTolerance(5);
+
+    pid_heading.setTarget(normalizeTarget(correct_angle));
+    pid_heading.setIntegralMax(0);  
+    pid_heading.setIntegralRange(1);
+    pid_heading.setSmallBigErrorTolerance(0, 0);
+    pid_heading.setSmallBigErrorDuration(0, 0);
+    pid_heading.setDerivativeTolerance(0);
+    pid_heading.setArrive(false);
+
+    double start_time = Brain.timer(msec);
+    double left_output = 0, right_output = 0, correction_output = 0;
+    double current_distance = 0, current_angle = 0;
+
+    // Main PID loop for driving straight using distance sensor
+    while (((!pid_distance.targetArrived()) && Brain.timer(msec) - start_time <= time_limit_msec && exit) || 
+           (!exit && current_distance < distance_mm && Brain.timer(msec) - start_time <= time_limit_msec)) {
+
+        // Calculate current distance and heading
+        current_distance = fabs(frontDistanceSensor.value() - start_distance);
+        current_angle = getInertialHeading();
+
+        left_output = pid_distance.update(current_distance) * drive_direction;
+        right_output = left_output;
+        correction_output = pid_heading.update(current_angle);
+
+        // Minimum Output Check
+        if(min_speed) {
+            scaleToMin(left_output, right_output, min_output);
+        }
+        if(!exit) {
+            left_output = 24 * drive_direction;
+            right_output = 24 * drive_direction;
+        }
+
+        // Apply heading correction
+        left_output += correction_output;
+        right_output -= correction_output;
+
+        // Max Output Check
+        scaleToMax(left_output, right_output, max_output);
+
+        // Max Acceleration/Deceleration Check
+        if(prev_left_output - left_output > max_slew_rev) {
+            left_output = prev_left_output - max_slew_rev;
+        }
+        if(prev_right_output - right_output > max_slew_rev) {
+            right_output = prev_right_output - max_slew_rev;
+        }
+        if(left_output - prev_left_output > max_slew_fwd) {
+            left_output = prev_left_output + max_slew_fwd;
+        }
+        if(right_output - prev_right_output > max_slew_fwd) {
+            right_output = prev_right_output + max_slew_fwd;
+        }
+
+        prev_left_output = left_output;
+        prev_right_output = right_output;
+
+        driveChassis(left_output, right_output);
+        wait(10, msec);
+    }
+
+    if(exit) {
+        prev_left_output = 0;
+        prev_right_output = 0;
+        stopChassis(vex::hold);
+    }
+    is_turning = false;
+}
 /*
  * Drives the robot a specified distance (in inches) using PID control.
  * - distance_in: Target distance to drive (positive or negative).
@@ -1236,18 +1345,18 @@ void moveToPoint(double x, double y, int dir, double time_limit_msec, bool exit,
     prev_left_output = 0;
     prev_right_output = 0;
     stopChassis(vex::hold); // Stop at end if required
-  }
+  } 
   correct_angle = getInertialHeading(); // Update global heading
   is_turning = false;                   // Reset turning state
 }
-void moveToPointChain(double x, double y, int dir, double time_limit_msec, double max_output, bool overturn) {
+void moveToPointChain(double x, double y, int dir, double exit_dist, double time_limit_msec, double max_output, bool overturn) {
   stopChassis(vex::brakeType::coast); // Stop chassis before moving
   is_turning = true;                  // Set turning state
   double threshold = 0.5;
   int add = dir > 0 ? 0 : 180;
   double max_slew_fwd = dir > 0 ? max_slew_accel_fwd : max_slew_decel_rev;
   double max_slew_rev = dir > 0 ? max_slew_decel_fwd : max_slew_accel_rev;
-  bool min_speed = false;
+  bool min_speed = true;
 
   PID pid_distance = PID(distance_kp, distance_ki, distance_kd);
   PID pid_heading = PID(heading_correction_kp, heading_correction_ki, heading_correction_kd);
@@ -1320,7 +1429,9 @@ void moveToPointChain(double x, double y, int dir, double time_limit_msec, doubl
     right_output = left_output;
     left_output = left_output + correction_output;
     right_output = right_output - correction_output;
-
+    if(fabs(hypot(x - x_pos, y - y_pos)) <= exit_dist){
+      break;
+    }
     // Max Output Check
     scaleToMax(left_output, right_output, max_output);
 
@@ -1491,5 +1602,4 @@ void boomerang(double x, double y, int dir, double a, double dlead, double time_
 // This file is intended as a template for VEX/V5 robotics teams.
 // All functions and variables use clear, consistent naming conventions.
 // Comments are concise and explain the intent of each section.
-
 // Teams can adapt PID values, drive base geometry, and logic as needed for their robot.
