@@ -1329,10 +1329,7 @@ void moveToPointChain(double x, double y, int dir, double time_limit_msec, doubl
     driveChassis(left_output, right_output); // Apply output to chassis
     wait(10, msec);
   }
-  
-  prev_left_output = 0;
-  prev_right_output = 0;
-
+  stopChassis(vex::coast);
   correct_angle = getInertialHeading(); // Update global heading
   is_turning = false;                   // Reset turning state
 }
@@ -1494,4 +1491,5 @@ void boomerang(double x, double y, int dir, double a, double dlead, double time_
 // This file is intended as a template for VEX/V5 robotics teams.
 // All functions and variables use clear, consistent naming conventions.
 // Comments are concise and explain the intent of each section.
+
 // Teams can adapt PID values, drive base geometry, and logic as needed for their robot.
