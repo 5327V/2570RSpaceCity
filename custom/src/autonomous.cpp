@@ -571,10 +571,16 @@ void left7LongandWing(){
   driveChassis(0,0);
   vex::wait(1.4, sec);
   driveChassis(8,8);
-  vex::wait(0.1, sec);
-  moveToPoint(-13, 4, 1, 2000, false, 8);
+  vex::wait(0.15, sec);
+  leftWing.set(true);
+  moveToPoint(-12.5, 4, 1, 2000, false, 8);
   turnToAngle(-177, 800, true, 7);
-  driveToHeading(-25, 180, 3000, 5);
+  vex::task wingdep([]{
+    vex::wait(350, msec);
+    leftWing.set(false);
+    return 0;
+  });
+  driveToHeading(-32, -177, 3000, 5);
   stopChassis(brakeType::hold);
   //
 
