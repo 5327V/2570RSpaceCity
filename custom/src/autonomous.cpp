@@ -42,7 +42,7 @@ void left9Long(){
   heading_correction_kp = 0.3;
   moveToPoint(-23, 15, -1, 3000, false, 8);
   stopIntake();
-  boomerang(-32, 15, -1,90, 0.1, 3000, true, 8);
+  boomerang(-33.4, 15, -1,90, 0.1, 3000, true, 8);
   turnToAngle(180, 1000, true, 7);
   driveToHeading(-14, 180, 3000, true, 7);
   scoreLongGoal();
@@ -85,7 +85,7 @@ void left9LongDisrupt(){
     matchloader.set(true);
     return 0;
   });
-  moveToPoint(-6, 24, 1, 2000, false, 6);
+  moveToPoint(-7, 24, 1, 2000, false, 6);
   boomerang(-30, 33.5, 1, -39, 0.1, 3000, true, 9);
   matchloader.set(true);
   vex::wait(80, msec);
@@ -136,7 +136,7 @@ void right9Long(){
     matchloader.set(true);
     return 0;
   });
-  moveToPoint(6, 24, 1, 2000, false, 5);
+  moveToPoint(9, 24, 1, 2000, false, 5);
   matchloader.set(false);
   vex::task matchloadDeploy2([]{
     vex::wait(1000, msec);
@@ -146,16 +146,20 @@ void right9Long(){
   boomerang(33, 43, 1, 40, 0.1, 3000, true, 5);
   matchloader.set(true);
   vex::wait(80, msec);
-  heading_correction_kp = 0.3;
-  moveToPoint(23, 13, -1, 3000, false, 8);
+  heading_correction_kp = 0.8;
+  //moveToPoint(34, 30, -1, 3000, false, 8);
+  driveChassis(-8,-8);
+  vex::wait(0.1, sec);
+  turnToAngle(0, 1000, true, 7);
+  moveToPoint(38, 10, -1, 3000, false, 8);
   stopIntake();
-  boomerang(45, 13, -1,-90, 0.1, 3000, true, 8);
+  boomerang(48,10, -1,-90, 0.1, 3000, true, 8);
   turnToAngle(180, 1000, true, 7);
-  driveToHeading(-12.2, 180, 3000, true, 7);
+  driveToHeading(-22, 180, 3000, true, 7);
   scoreLongGoal();
   vex::wait(1500, msec);
   matchloader.set(true);
-  moveToPoint(45, 6, 1, 3000, false, 6);
+  moveToPoint(49, 6, 1, 3000, false, 6);
   storeIntake();
   turnToAngle(180, 3000);
   driveChassis(6,6);
@@ -165,7 +169,7 @@ void right9Long(){
     scoreLongGoal();
     return 0;
   });
-  moveToPoint(45.5, 10, -1, 3000, false, 6);
+  moveToPoint(49.2, 10, -1, 3000, false, 6);
   driveToHeading(-16, 180, 3000, true, 6);
   scoreLongGoal();
   vex::wait(1500, msec);
@@ -553,39 +557,92 @@ void left7LongandWing(){
   storeIntake();
   correct_angle = -45;
   vex::task matchloadDeploy([]{
-    vex::wait(850, msec);
+    vex::wait(750, msec);
     matchloader.set(true);
     return 0;
   });
+  //goes to stack
   moveToPoint(-8.2, 24, 1, 2000, false, 6);
-  turnToAngle(-130, 300, false, 7);
-  moveToPoint(-22, -3, 1, 2000, false, 12);
+  turnToAngle(-150, 300, false, 7);
+  heading_correction_kp = 0.67;
+  correct_angle = normalizeTarget(-160);
+  moveToPoint(-23, -6, 1, 2000, false, 10);
   turnToAngle(180, 800, true, 7);
   driveChassis(6,6);
   vex::wait(1.1, sec);
-  moveToPoint(-23, 5, -1, 2000, false, 8);
+  moveToPoint(-23.5, 5, -1, 2000, false, 8);
   turnToAngle(180, 800, true, 7);
   driveChassis(-7,-7);
   vex::wait(0.4, sec);
   scoreLongGoal();
   driveChassis(0,0);
   vex::wait(1.4, sec);
-  driveChassis(8,8);
-  vex::wait(0.15, sec);
   leftWing.set(true);
-  moveToPoint(-12.5, 4, 1, 2000, false, 8);
-  turnToAngle(-177, 800, true, 7);
+  curveCircle(120, -12, 1000, false, 10);
+  moveToPoint(-20, -1, 1, 2000, false, 8);
   vex::task wingdep([]{
     vex::wait(350, msec);
     leftWing.set(false);
     return 0;
   });
-  driveToHeading(-32, -177, 3000, 5);
+  turnToAngle(180, 800, true, 7);
+  driveTo(-36, 3000, true,4);
+  driveChassis(-5,-5);
+  vex::wait(0.1, sec);
+  driveChassis(0,0);
   stopChassis(brakeType::hold);
   //
 
 }
 
 void right7LongandWing(){
-  
+  heading_correction_kp = 0.8;
+  vex::task antiJamF([]{
+    while(1){
+      antiJamTask();
+      vex::wait(20, msec);
+    }
+    return 0;
+  });
+  // Use this for tuning linear and turn pid
+  storeIntake();
+  correct_angle = 45;
+  vex::task matchloadDeploy([]{
+    vex::wait(720, msec);
+    matchloader.set(true);
+    return 0;
+  });
+  //goes to stack
+  moveToPoint(8.2, 24, 1, 2000, false, 6);
+  turnToAngle(140, 300, false, 7);
+  heading_correction_kp = 0.67;
+  correct_angle = normalizeTarget(165);
+  //moveToPoint(31, 10, 1, 2000, false, 12);
+  heading_correction_kp = 0.8;
+  moveToPoint(40.8, -3, 1, 2000, false, 10);
+  turnToAngle(-180, 800, true, 7);
+  driveChassis(6,6);
+  vex::wait(1.1, sec);
+  moveToPoint(42, 5, -1, 2000, false, 8);
+  turnToAngle(-180, 800, true, 7);
+  driveChassis(-8,-8);
+  vex::wait(0.4, sec);
+  scoreLongGoal();
+  driveChassis(0,0);
+  vex::wait(1.4, sec);
+  leftWing.set(true);
+  curveCircle(120, -12, 1000, false, 10);
+  moveToPoint(48, 0, 1, 2000, false, 8);
+  vex::task wingdep([]{
+    vex::wait(150, msec);
+    leftWing.set(false);
+    return 0;
+  });
+  turnToAngle(-180, 800, true, 7);
+  driveTo(-32, 3000, true,4);
+  driveChassis(-5,-5);
+  vex::wait(0.1, sec);
+  driveChassis(0,0);
+  stopChassis(brakeType::hold);
+  //
 }

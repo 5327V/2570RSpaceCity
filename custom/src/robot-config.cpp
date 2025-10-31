@@ -86,13 +86,13 @@ bool heading_correction = true; // Use heading correction when the bot is statio
 
 // Set to true for more accuracy and smoothness, false for more speed
 bool dir_change_start = true;   // Less accel/decel due to expecting direction change at start of movement
-bool dir_change_end = true;     // Less accel/decel due to expecting direction change at end of movement
+bool dir_change_end = false;     // Less accel/decel due to expecting direction change at end of movement
 
 double min_output = 6; // Minimum output voltage to motors while chaining movements
 
 // Maximum allowed change in voltage output per 10 msec during movement
 double max_slew_accel_fwd = 24;
-double max_slew_decel_fwd = 2;
+double max_slew_decel_fwd = 0.1;
 double max_slew_accel_rev = 24;
 double max_slew_decel_rev = 2;
 

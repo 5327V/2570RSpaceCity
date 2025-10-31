@@ -3,7 +3,7 @@
 #include "../custom/include/autonomous.h"
 #include "../custom/include/intake.h"
 // Modify autonomous, driver, or pre-auton code below
-int auton_selected = 3;
+int auton_selected = 2;
 bool auto_started = false;
 
 void runAutonomous() {
@@ -23,7 +23,7 @@ void runAutonomous() {
       left7LongandWing();
       break; 
     case 4:
-      //right7LongandWing();
+      right7LongandWing();
       break;
     case 5:
       leftLongAndMid();
