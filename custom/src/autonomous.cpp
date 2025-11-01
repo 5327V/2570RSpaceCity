@@ -438,6 +438,13 @@ void rightLongAndLow(){
 }
 
 void awp(){
+  min_output = 100;
+ double max_slew_accel_fwd = 24;
+double max_slew_decel_fwd = 24;
+double max_slew_accel_rev = 24;
+double max_slew_decel_rev = 24;
+dir_change_end = true;    
+
  min_output = 100;
  vex::task antiJamF([]{
    while(1){
