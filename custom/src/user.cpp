@@ -3,7 +3,7 @@
 #include "../custom/include/autonomous.h"
 #include "../custom/include/intake.h"
 // Modify autonomous, driver, or pre-auton code below
-int auton_selected = 0;
+int auton_selected = 5;
 bool auto_started = false;
 
 void runAutonomous() {
