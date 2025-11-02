@@ -309,6 +309,89 @@ dir_change_end = true;
   driveToHeading(-20, 180, 3000, true, 6);
 
 }
+void awp2(){
+  min_output = 100;
+ max_slew_accel_fwd = 24;
+max_slew_decel_fwd = 24;
+max_slew_accel_rev = 24;
+ max_slew_decel_rev = 24;
+dir_change_end = true;  
+  leftWing.set(true);
+  min_output = 100;
+  vex::task antiJamF([]{
+    while(1){
+      antiJamTask();
+      vex::wait(20, msec);
+    }
+    return 0;
+  });
+  // Use this for tuning linear and turn pid
+  storeIntake();
+  correct_angle = -45;
+  vex::task matchloadDeploy([]{
+    vex::wait(850, msec);
+    matchloader.set(true);
+    return 0;
+  });
+  moveToPoint(-7, 24, 1, 2000, false, 5);
+  matchloader.set(false);
+  vex::task matchloadDeploy2([]{
+    vex::wait(850, msec);
+    //matchloader.set(true);
+    return 0;
+  });
+  boomerang(-24, 33, 1, -44, 0.1, 3000, true, 5);
+  driveChassis(4,4);
+  vex::wait(100,msec);
+  //matchloader.set(true);
+  vex::wait(80, msec);
+  moveToPoint(-0.5, 23, -1, 3000, false, 5);
+  driveChassis(-1,-1);
+  vex::wait(10, msec);
+  //matchloader.set(false);
+  turnToAngle(-138, 1000, true, 5);
+  driveTo(-10,2000, true, 5);
+  middleGoal.set(true);
+  scoreMiddleGoal();
+  vex::wait(400, msec);
+  stopIntake();
+  middleGoal.set(false);
+  matchloader.set(true);
+  moveToPoint(-22.8, 1, 1, 3000, false, 6);
+  matchloader.set(true);
+  turnToAngle(180, 3000);
+  moveToPoint(-23.5, 0, 1, 3000, false, 6);
+  storeIntake();
+  turnToAngle(180, 3000);
+  driveChassis(6,6);
+  vex::wait(900, msec);
+  vex::task scoreL([]{
+    vex::wait(1100, msec);
+    scoreLongGoal();
+    return 0;
+  });
+  moveToPoint(-23, 5, -1, 3000, false, 6);
+  driveToHeading(-20, 180, 3000, true, 6);
+  scoreLongGoal();
+  vex::wait(900, msec);
+  driveToHeading(10, 180, 3000, true, 6);
+  matchloader.set(false);
+
+
+  moveToPoint(40,26,1,6000,true,6);
+  storeIntake();
+  boomerang(67,-1,1,180,0.1,9000,false,6);
+  //turnToAngle(180,1000,true,6);
+  matchloader.set(true);
+  driveToHeading(20,180,3000,true,6);
+  vex::wait(1000,msec);
+  moveToPoint(70,-1,-1,6000,true,6);
+  driveToHeading(-12,180,3000,true,6);
+  scoreLongGoal();
+
+  
+
+}
 
 void leftLongAndMidDisrupt(){
   min_output = 100;

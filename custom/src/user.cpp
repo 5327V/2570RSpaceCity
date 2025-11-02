@@ -3,7 +3,7 @@
 #include "../custom/include/autonomous.h"
 #include "../custom/include/intake.h"
 // Modify autonomous, driver, or pre-auton code below
-int auton_selected = 5;
+int auton_selected = 10;
 bool auto_started = false;
 
 void runAutonomous() {
@@ -37,6 +37,9 @@ void runAutonomous() {
 
     case 9:
       right9LongDisrupt();
+
+    case 10:
+      awp2();
   }
   
 }
