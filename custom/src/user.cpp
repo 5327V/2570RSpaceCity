@@ -79,7 +79,7 @@ void runDriver() {
     button_right_arrow = controller_1.ButtonRight.pressing();
 
     // default tank drive or replace it with your preferred driver code here: 
-    driveChassis(ch3 * 0.12 + ch1 * 0.12 , ch3 * 0.12 - ch1 * 0.12);
+    driveChassis(ch3 * 0.12 + ch1 * 0.123 , ch3 * 0.12 - ch1 * 0.123);
 
     if(r1){
       storeIntake();

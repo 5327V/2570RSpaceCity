@@ -380,7 +380,7 @@ dir_change_end = true;
 
   moveToPoint(40,26,1,6000,true,6);
   storeIntake();
-  boomerang(67,-1,1,180,0.1,9000,false,6);
+  boomerang(67,-1,1,180,0.1,9000,false,6); 
   //turnToAngle(180,1000,true,6);
   matchloader.set(true);
   driveToHeading(20,180,3000,true,6);
