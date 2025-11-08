@@ -2,8 +2,9 @@
 #include "motor-control.h"
 #include "../custom/include/autonomous.h"
 #include "../custom/include/intake.h"
+#include "../custom/include/logger.h"
 // Modify autonomous, driver, or pre-auton code below
-int auton_selected = 10;
+int auton_selected = 1;
 bool auto_started = false;
 
 void runAutonomous() {
@@ -39,7 +40,8 @@ void runAutonomous() {
       right9LongDisrupt();
 
     case 10:
-      awp2();
+      right9LongDisrupt();
+      //test();
   }
   
 }
@@ -49,13 +51,18 @@ bool l1, l2, r1, r2;
 bool button_a, button_b, button_x, button_y;
 bool button_up_arrow, button_down_arrow, button_left_arrow, button_right_arrow;
 int chassis_flag = 0;
+//Logger logger(std::cout, Logger::Level::DEBUG);
 
 void runDriver() {
   stopChassis(coast);
   heading_correction = false;
   bool downPressed;
   bool bPressed;
-  
+  bool upPressed;
+  while(inertial_sensor.isCalibrating()){
+    wait(10, msec);
+  }
+  resetAngle(0);
   while (true) {
     antiJamTask();
     // [-100, 100] for controller stick axis values
@@ -77,10 +84,10 @@ void runDriver() {
     button_down_arrow = controller_1.ButtonDown.pressing();
     button_left_arrow = controller_1.ButtonLeft.pressing();
     button_right_arrow = controller_1.ButtonRight.pressing();
-
+    
     // default tank drive or replace it with your preferred driver code here: 
-    driveChassis(ch3 * 0.12 + ch1 * 0.123 , ch3 * 0.12 - ch1 * 0.123);
-
+    driveChassis(ch3 * 0.12 + ch1 * 0.12, ch3 * 0.12 - ch1 * 0.12);
+    
     if(r1){
       storeIntake();
       middleGoal.set(false);

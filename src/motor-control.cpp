@@ -6,6 +6,7 @@
 #include "motor-control.h"
 #include "../custom/include/autonomous.h"
 #include "../custom/include/robot-config.h"
+#include "../custom/include/logger.h"
 // ============================================================================
 // INTERNAL STATE (DO NOT CHANGE)
 // ============================================================================
@@ -52,7 +53,8 @@ void resetChassis() {
 void resetAngle(double angle){
   double prev_heading_rad = 0;
   double local_polar_angle_rad = 0;
-  inertial_sensor.setHeading(angle, degrees);
+  inertial_sensor.setRotation(angle, degrees);
+  //inertial_sensor.setRotation(angle, degrees);
 }
 
 void resetOdom(double _x, double _y){
@@ -84,10 +86,10 @@ double getRightRotationDegree() {
  */
 double normalizeTarget(double angle) {
   // Adjust angle to be within +/-180 degrees of the inertial sensor's rotation
-  if (angle - inertial_sensor.rotation() > 180) {
-    while (angle - inertial_sensor.rotation() > 180) angle -= 360;
-  } else if (angle - inertial_sensor.rotation() < -180) {
-    while (angle - inertial_sensor.rotation() < -180) angle += 360;
+  if (angle - getInertialHeading() > 180) {
+    while (angle - getInertialHeading() > 180) angle -= 360;
+  } else if (angle - getInertialHeading() < -180) {
+    while (angle - getInertialHeading() < -180) angle += 360;
   }
   return angle;
 }
@@ -98,7 +100,7 @@ double normalizeTarget(double angle) {
  */
 double getInertialHeading(bool normalize) {
   // Get inertial sensor rotation in degrees
-  return inertial_sensor.rotation(degrees);
+  return inertial_sensor.rotation(degrees) * (3600/3558);
 }
 
 // ============================================================================
@@ -967,6 +969,7 @@ void correctHeading() {
  * Tracks the robot's position using only drivetrain encoders and inertial sensor.
  * Assumes no external odometry tracking wheels.
  */
+Logger logger(std::cout, Logger::Level::DEBUG);
 void trackNoOdomWheel() {
   resetChassis();
   double prev_heading_rad = 0;
@@ -1000,12 +1003,15 @@ void trackNoOdomWheel() {
     prev_heading_rad = heading_rad;
     prev_left_deg = left_deg;
     prev_right_deg = right_deg;
-
+    //logger.info("Position: (%f, %f) Heading: %f\u00B0", 0, 0, getInertialHeading());
     Brain.Screen.clearScreen();
-    Brain.Screen.setCursor(1, 1);
+    Brain.Screen.setCursor(7, 1);
     Brain.Screen.print("X: %f", x_pos);
-    Brain.Screen.setCursor(2, 1);
+    Brain.Screen.setCursor(8, 1);
     Brain.Screen.print("Y: %f", y_pos);
+    Brain.Screen.setCursor(9, 1);
+    Brain.Screen.print("Z: %f", getInertialHeading());
+
     
     wait(10, msec);
   }

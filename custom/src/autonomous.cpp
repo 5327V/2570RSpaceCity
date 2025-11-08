@@ -30,19 +30,19 @@ void left9Long(){
     matchloader.set(true);
     return 0;
   });
-  moveToPoint(-7, 24, 1, 2000, false, 5);
+  moveToPoint(-10.5, 24, 1, 2000, false, 5);
   matchloader.set(false);
   vex::task matchloadDeploy2([]{
     vex::wait(950, msec);
     // matchloader.set(true);
     return 0;
   });
-  boomerang(-30, 35.5, 1, -39, 0.1, 3000, true, 6);
+  boomerang(-31, 32, 1, -39, 0.1, 3000, true, 6);
   vex::wait(80, msec);
   heading_correction_kp = 0.3;
-  moveToPoint(-23, 15, -1, 3000, false, 8);
+  moveToPoint(-23, 10, -1, 3000, false, 8);
   stopIntake();
-  moveToPoint(-34.4, 15, -1,  3000, true, 8);
+  moveToPoint(-38, 8, -1,  3000, true, 8);
   turnToAngle(180, 1000, true, 7);
   driveToHeading(-14, 180, 3000, true, 7);
   scoreLongGoal();
@@ -50,7 +50,12 @@ void left9Long(){
   driveChassis(0,0);
   resetOdom(-31.5, 15);
   matchloader.set(true);
-  moveToPoint(-31, -7, 1, 3000, false, 6);
+  max_slew_accel_fwd = 24;
+max_slew_decel_fwd = 24;
+max_slew_accel_rev = 24;
+ max_slew_decel_rev = 24;
+dir_change_end = true;   
+  moveToPoint(-29, -7, 1, 3000, false, 6);
   storeIntake();
   turnToAngle(180, 3000);
   driveChassis(6,6);
@@ -60,7 +65,7 @@ void left9Long(){
     scoreLongGoal();
     return 0;
   });
-  moveToPoint(-31, 10, -1, 3000, false, 6);
+  moveToPoint(-29, 10, -1, 3000, false, 6);
   driveChassis(-6, -6);
   vex::wait(1300, msec);
   driveChassis(0,0);
@@ -681,7 +686,7 @@ void left7LongandWing(){
   driveChassis(0,0);
   vex::wait(1.5, sec);
   leftWing.set(true);
-  curveCircle(120, -12, 1000, false, 10);
+  curveCircle(120, -14, 1000, false, 8);
   moveToPoint(-20, -1, 1, 2000, false, 8);
   vex::task wingdep([]{
     vex::wait(350, msec);
@@ -689,10 +694,8 @@ void left7LongandWing(){
     return 0;
   });
   turnToAngle(180, 800, true, 7);
-  driveTo(-31, 3000, true,4);
-  driveChassis(-5,-5);
-  vex::wait(0.1, sec);
-  driveChassis(0,0);
+  driveTo(-30, 3000, true,4);
+ 
   stopChassis(brakeType::hold);
   //
 
@@ -742,7 +745,7 @@ void right7LongandWing(){
     return 0;
   });
   turnToAngle(-180, 800, true, 7);
-  driveTo(-31, 3000, true,4);
+  driveTo(-30, 20000, true,4);
 
   stopChassis(brakeType::hold);
   //

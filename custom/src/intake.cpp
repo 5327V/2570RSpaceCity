@@ -35,11 +35,15 @@ void scoreLongGoal(){
 
 void scoreMiddleGoal(){
     intakeSpeed = 12;
-    hoodSpeed = 10;
+    hoodSpeed = 8;
     intake.spin(forward, 12, voltageUnits::volt);
-    hood.spin(forward, 10, voltageUnits::volt);
+    hood.spin(forward, 8, voltageUnits::volt);
 }
 
+/**
+ * @brief Move the intake backwards at maximum speed to eject the ball.
+ * This function is typically used to shoot the ball out of the intake.
+ */
 void outtake(){
     intakeSpeed = -12;
     hoodSpeed = -12;
