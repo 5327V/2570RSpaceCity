@@ -4,7 +4,7 @@
 #include "../custom/include/intake.h"
 #include "../custom/include/logger.h"
 // Modify autonomous, driver, or pre-auton code below
-int auton_selected = 4;
+int auton_selected = 5;
 bool auto_started = false;
 
 void runAutonomous() {
@@ -84,7 +84,7 @@ void runDriver() {
     button_right_arrow = controller_1.ButtonRight.pressing();
     
     // default tank drive or replace it with your preferred driver code here: 
-    driveChassis(ch3 * 0.12 + ch1 * 0.12, ch3 * 0.12 - ch1 * 0.12);
+    driveChassis(ch3 * 0.12 + ch1 * 0.123, ch3 * 0.12 - ch1 * 0.123);
     
     if(r1){
       storeIntake();
