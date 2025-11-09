@@ -4,7 +4,7 @@
 #include "../custom/include/intake.h"
 #include "../custom/include/logger.h"
 // Modify autonomous, driver, or pre-auton code below
-int auton_selected = 1;
+int auton_selected = 4;
 bool auto_started = false;
 
 void runAutonomous() {
@@ -59,10 +59,8 @@ void runDriver() {
   bool downPressed;
   bool bPressed;
   bool upPressed;
-  while(inertial_sensor.isCalibrating()){
-    wait(10, msec);
-  }
-  resetAngle(0);
+  
+  matchloader.set(false);
   while (true) {
     antiJamTask();
     // [-100, 100] for controller stick axis values
