@@ -675,11 +675,11 @@ void left7LongandWing(){
   turnToAngle(-150, 300, false, 7);
   heading_correction_kp = 0.67;
   correct_angle = normalizeTarget(-160);
-  moveToPoint(-22.7, -6, 1, 2000, false, 9);
+  moveToPoint(-20.5, -6, 1, 2000, false, 9);
   turnToAngle(180, 800, true, 7);
   driveChassis(6,6);
   vex::wait(0.94, sec);
-  moveToPoint(-22.5, 5, -1, 2000, false, 8);
+  moveToPoint(-21, 5, -1, 2000, false, 8);
   turnToAngle(180, 800, true, 7);
   driveChassis(-7,-7);
   vex::wait(0.4, sec);
@@ -689,7 +689,7 @@ void left7LongandWing(){
   vex::wait(2, sec);
   leftWing.set(true);
   //curveCircle(120, -14, 1000, false, 8);
-  moveToPoint(-16.5, -1, 1, 2000, false, 8);
+  moveToPoint(-15, -1, 1, 2000, false, 8);
   vex::task wingdep([]{
     vex::wait(350, msec);
     leftWing.set(false);
@@ -755,3 +755,57 @@ void right7LongandWing(){
   stopChassis(brakeType::hold);
   //
 }
+
+void leftwing4(){
+    heading_correction_kp = 0.8;
+  vex::task antiJamF([]{
+    while(1){
+      antiJamTask();
+      vex::wait(20, msec);
+    }
+    return 0;
+  });
+  leftWing.set(true);
+  // Use this for tuning linear and turn pid
+  storeIntake();
+  correct_angle = -45;
+  vex::task matchloadDeploy([]{
+    vex::wait(750, msec);
+    matchloader.set(true);
+    return 0;
+  });
+  //goes to stack
+  moveToPoint(-8.2, 24, 1, 2000, true, 6);
+  turnToAngle(-150, 300, true, 7);
+  heading_correction_kp = 0.67;
+  matchloader.set(false);
+  correct_angle = normalizeTarget(-160);
+  moveToPoint(-23, 0, 1, 2000, true, 9);
+  turnToAngle(180,1000,true,6);
+  driveToHeading(-27,180,1000,true,6);
+  scoreLongGoal();
+  resetOdom(-23.5,12);
+  driveChassis(0,0);
+  vex::wait(1.85, sec);
+  
+
+
+  leftWing.set(true);
+  //curveCircle(120, -14, 1000, false, 8);
+  driveTo(3.5,3000,true,4);
+  moveToPoint(-16, 49, 1, 2000, true, 8);
+  vex::task wingdep([]{
+    vex::wait(350, msec);
+    leftWing.set(false);
+    return 0;
+  });
+  turnToAngle(180, 3000, true, 7);
+  //driveTo(-32, 3000, true,4);
+  //turnToAngle(-160, 900, true, 10);
+ 
+  stopChassis(brakeType::hold);
+  }
+
+  void debug() {
+    moveToPoint(0, 24, 1, 2000, true, 6);
+  }

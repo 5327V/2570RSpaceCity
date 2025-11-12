@@ -4,7 +4,7 @@
 #include "../custom/include/intake.h"
 #include "../custom/include/logger.h"
 // Modify autonomous, driver, or pre-auton code below
-int auton_selected = 3;
+int auton_selected = 10;
 bool auto_started = false;
 
 void runAutonomous() {
@@ -40,8 +40,12 @@ void runAutonomous() {
       right9LongDisrupt();
 
     case 10:
-      right9LongDisrupt();
+      //right9LongDisrupt();
       //test();
+      leftwing4();
+
+    case 11:
+      debug();
   }
   
 }
