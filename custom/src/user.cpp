@@ -4,7 +4,7 @@
 #include "../custom/include/intake.h"
 #include "../custom/include/logger.h"
 // Modify autonomous, driver, or pre-auton code below
-int auton_selected = 5;
+int auton_selected = 3;
 bool auto_started = false;
 
 void runAutonomous() {
