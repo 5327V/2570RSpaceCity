@@ -787,25 +787,68 @@ void leftwing4(){
   resetOdom(-23.5,12);
   driveChassis(0,0);
   vex::wait(1.85, sec);
+  heading_correction_kp = 1.1;
   
 
 
   leftWing.set(true);
   //curveCircle(120, -14, 1000, false, 8);
   driveTo(3.5,3000,true,4);
-  moveToPoint(-16, 49, 1, 2000, true, 8);
-  vex::task wingdep([]{
-    vex::wait(350, msec);
-    leftWing.set(false);
-    return 0;
-  });
+  boomerang(-16.5, 52, 1, 180,0.1, 2000, true, 8);
+  //turnToAngle(78, 3000, true, 7);
+  leftWing.set(false);
   turnToAngle(180, 3000, true, 7);
-  //driveTo(-32, 3000, true,4);
+  driveTo(-31, 3000, true,4);
   //turnToAngle(-160, 900, true, 10);
  
   stopChassis(brakeType::hold);
   }
 
-  void debug() {
-    moveToPoint(0, 24, 1, 2000, true, 6);
-  }
+
+
+void rightwing4() {
+  heading_correction_kp = 0.8;
+  vex::task antiJamF([]{
+    while(1){
+      antiJamTask();
+      vex::wait(20, msec);
+    }
+    return 0;
+  });
+  // Use this for tuning linear and turn pid
+  storeIntake();
+  correct_angle = 45;
+  vex::task matchloadDeploy([]{ 
+    vex::wait(720, msec);
+    matchloader.set(true);
+    return 0;
+  });
+  //goes to stack
+  moveToPoint(8.2, 24, 1, 2000, false, 6);
+  turnToAngle(140, 300, false, 7);
+  heading_correction_kp = 0.67;
+  correct_angle = normalizeTarget(165);
+  matchloader.set(false);
+  //moveToPoint(31, 10, 1, 2000, false, 12);
+  heading_correction_kp = 0.8;
+  moveToPoint(39, 5, 1, 2000, false, 8);
+  turnToAngle(180,1000,true,6);
+  driveToHeading(-27,180,1000,true,6);
+  scoreLongGoal();
+  driveChassis(0,0);
+  vex::wait(1.85, sec);
+  heading_correction_kp = 1.1;
+
+  leftWing.set(true);
+  //curveCircle(120, -14, 1000, false, 8);
+  driveTo(3.5,3000,true,4);
+  boomerang(47.5, 7, 1, 180 ,0.1, 2000, true, 8);
+  //turnToAngle(78, 3000, true, 7);
+  leftWing.set(false);
+  turnToAngle(180, 3000, true, 7);
+  driveTo(-33, 3000, true,4);
+  //turnToAngle(-160, 900, true, 10);
+ 
+  stopChassis(brakeType::hold);
+
+}

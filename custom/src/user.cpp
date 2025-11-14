@@ -31,21 +31,27 @@ void runAutonomous() {
       break;
     case 6:
       rightLongAndLow();
+      break;
     case 7:
       left9LongDisrupt();
+      break;
     case 8:
       leftLongAndMidDisrupt();
+      break;
 
     case 9:
       right9LongDisrupt();
+      break;
 
     case 10:
       //right9LongDisrupt();
       //test();
       leftwing4();
-
+      break;
     case 11:
-      debug();
+      rightwing4();
+      break;
+
   }
   
 }

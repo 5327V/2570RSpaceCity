@@ -14,3 +14,4 @@ void awp2();
 void test();
 void leftwing4();
 void debug();
+void rightwing4();
